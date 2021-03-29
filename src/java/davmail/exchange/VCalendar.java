@@ -401,6 +401,10 @@ public class VCalendar extends VObject {
                         vObject.setPropertyValue("TZID", exchangeTzid);
                         // also replace TZID in properties
                         updateTzid(tzid, exchangeTzid);
+
+                        //@todo:    also Update "StartTimeZone" + "EndTimeZone" Fields,
+                        //          like it is done for TZID with updateTzid(tzid, exchangeTzid);
+
                     }
                 }
             }
