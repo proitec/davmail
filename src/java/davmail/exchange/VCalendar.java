@@ -27,6 +27,7 @@ import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.regex.MatchResult;
 
 /**
  * VCalendar object.
@@ -375,7 +376,6 @@ public class VCalendar extends VObject {
             }
         }
         // end validate RRULE
-        
         // convert TZID to Exchange time zone id
         ResourceBundle tzBundle = ResourceBundle.getBundle("exchtimezones");
         ResourceBundle tzidsBundle = ResourceBundle.getBundle("stdtimezones");
@@ -404,7 +404,36 @@ public class VCalendar extends VObject {
 
                         //@todo:    also Update "StartTimeZone" + "EndTimeZone" Fields,
                         //          like it is done for TZID with updateTzid(tzid, exchangeTzid);
+                        //?updateStartTimeZone(tzid, exchangeTzid);
+                        updateStartTimeZone(tzid, exchangeTzid);
+                    }
+                }
+            }
+        }
+    }
 
+    protected void updateStartTimeZone(String localStartTimeZone, String exchangeStartTimeZone) {
+        for (VObject vObject : vObjects) {
+            if (vObject.isVEvent()) {
+
+                for (VProperty vProperty : vObject.properties) {
+
+                    VProperty dtStart = vObject.getProperty("DTSTART");
+                    VProperty dtEnd = vObject.getProperty("DTEND");
+                    
+                    dtStart.setParam("TZID", "W. Europe Standard Time");
+                    //dtStart.setParam("TZID", vTimezone.getPropertyValue("TZID") );
+
+                    dtEnd.setParam("TZID", "W. Europe Standard Time");
+                    //dtEnd.setParam("TZID", vTimezone.getPropertyValue("TZID") );
+
+                    //LOGGER.warn("----> DEBUG: vProperty.params.VALUE: " + vProperty.toString());
+                    if (vProperty != null && vProperty.hasParam("TZID")) {
+                        vProperty.addParam("TZID", vTimezone.getPropertyValue("TZID"));
+                    }
+
+                    if (localStartTimeZone.equalsIgnoreCase(vProperty.getParamValue("StartTimeZone"))) {
+                        vProperty.setParam("StartTimeZone", exchangeStartTimeZone);
                     }
                 }
             }
@@ -414,9 +443,30 @@ public class VCalendar extends VObject {
     protected void updateTzid(String tzid, String newTzid) {
         for (VObject vObject : vObjects) {
             if (vObject.isVEvent()) {
+                //LOGGER.warn(NativeJSON.stringify(vObject));
+                //LOGGER.warn("oldTzid: " + newTzid);
+                //LOGGER.warn("vObject" + vObject);
                 for (VProperty vProperty : vObject.properties) {
                     if (tzid.equalsIgnoreCase(vProperty.getParamValue("TZID"))) {
+                        //LOGGER.warn("DEBUG: FOUND getParamValue(TZID)");
                         vProperty.setParam("TZID", newTzid);
+                    }
+
+                    if (tzid.equalsIgnoreCase(vProperty.getParamValue("DTSTART"))) {
+                        vProperty.setParam("DTSTART", newTzid);
+                        //LOGGER.warn("DEBUG: FOUND getParamValue(DTSTART)");
+                    }
+
+                    if (tzid.equalsIgnoreCase(vProperty.getParamValue("DTEND"))) {
+                        vProperty.setParam("DTSTART", newTzid);
+                        //LOGGER.warn("DEBUG: FOUND getParamValue(DTEND)");
+                    }
+
+                    if (tzid.equalsIgnoreCase(vProperty.getParamValue("StartTimeZone"))) {
+                        vProperty.setParam("StartTimeZone", newTzid);
+                    }
+                    if (tzid.equalsIgnoreCase(vProperty.getParamValue("StartTimeZone"))) {
+                        vProperty.setParam("EndTimeZone", newTzid);
                     }
                 }
             }
