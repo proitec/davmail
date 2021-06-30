@@ -1,0 +1,29 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Launch Current File",
+            "request": "launch",
+            "mainClass": "${file}"
+        },
+        {
+            "type": "java",
+            "name": "Launch DavGateway",
+            "request": "launch",
+            "mainClass": "davmail.DavGateway",
+            "projectName": "davmail",
+            "args": "/etc/davmail.properties"
+        },
+        {
+            "type": "java",
+            "name": "Launch O365ManualAuthenticator",
+            "request": "launch",
+            "mainClass": "davmail.exchange.auth.O365ManualAuthenticator",
+            "projectName": "davmail"
+        }
+    ]
+}

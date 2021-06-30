@@ -80,6 +80,7 @@ import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+
 import java.net.NoRouteToHostException;
 import java.net.SocketException;
 import java.net.URL;
@@ -1478,6 +1479,7 @@ public class DavExchangeSession extends ExchangeSession {
             byte[] result;
 
             // experimental: build VCALENDAR from properties
+            LOGGER.warn("DEBUG: getICSFromItemProperties");
 
             try {
                 //MultiStatusResponse[] responses = DavGatewayHttpClientFacade.executeMethod(httpClient, propFindMethod);
@@ -1544,6 +1546,8 @@ public class DavExchangeSession extends ExchangeSession {
                     vEvent.setPropertyValue("CLASS", "PUBLIC");
                 }
 
+                LOGGER.warn("DEBUG: getICSFromItemProperties - instancetype: " + instancetype );
+
                 if (instancetype == null) {
                     vEvent.type = "VTODO";
                     double percentComplete = getDoublePropertyIfExists(davPropertySet, "percentcomplete");
@@ -1552,7 +1556,9 @@ public class DavExchangeSession extends ExchangeSession {
                     }
                     vEvent.setPropertyValue("STATUS", taskTovTodoStatusMap.get(getPropertyIfExists(davPropertySet, "taskstatus")));
                     vEvent.setPropertyValue("DUE;VALUE=DATE", convertDateFromExchangeToTaskDate(getPropertyIfExists(davPropertySet, "duedate")));
+                    LOGGER.warn("setPropertyValue DTSTART;VALUE=DATE: "+ convertDateFromExchangeToTaskDate(getPropertyIfExists(davPropertySet, "startdate")));
                     vEvent.setPropertyValue("DTSTART;VALUE=DATE", convertDateFromExchangeToTaskDate(getPropertyIfExists(davPropertySet, "startdate")));
+                    LOGGER.warn("setPropertyValue COMPLETED;VALUE=DATE: "+ convertDateFromExchangeToTaskDate(getPropertyIfExists(davPropertySet, "datecompleted")));
                     vEvent.setPropertyValue("COMPLETED;VALUE=DATE", convertDateFromExchangeToTaskDate(getPropertyIfExists(davPropertySet, "datecompleted")));
 
                 } else {
@@ -1560,6 +1566,7 @@ public class DavExchangeSession extends ExchangeSession {
                     // check mandatory dtstart value
                     String dtstart = getPropertyIfExists(davPropertySet, "dtstart");
                     if (dtstart != null) {
+                        LOGGER.warn("setPropertyValue DTSTART: "+ convertDateFromExchange(dtstart));
                         vEvent.setPropertyValue("DTSTART", convertDateFromExchange(dtstart));
                     } else {
                         LOGGER.warn("missing dtstart on item, using fake value. Set davmail.deleteBroken=true to delete broken events");
@@ -1631,7 +1638,7 @@ public class DavExchangeSession extends ExchangeSession {
                 LOGGER.warn("Unable to rebuild event content: " + e.getMessage(), e);
                 throw buildHttpNotFoundException(e);
             }
-
+            LOGGER.warn(result);
             return result;
         }
 
@@ -2513,6 +2520,7 @@ public class DavExchangeSession extends ExchangeSession {
                 if (roamingdictionary != null) {
                     timezoneName = getTimezoneNameFromRoamingDictionary(roamingdictionary);
                     if (timezoneName != null) {
+                        LOGGER.warn("DavExchange name: "+ timezoneName);
                         timezoneId = ResourceBundle.getBundle("timezoneids").getString(timezoneName);
                     }
                 }
@@ -2522,6 +2530,7 @@ public class DavExchangeSession extends ExchangeSession {
         } catch (IOException e) {
             LOGGER.warn("Unable to retrieve Exchange timezone id: " + e.getMessage(), e);
         }
+        LOGGER.warn("DavExchange ID: "+ timezoneId);
         return timezoneId;
     }
 
@@ -3154,6 +3163,7 @@ public class DavExchangeSession extends ExchangeSession {
         String result = null;
         if (value != null && value.length() > 0) {
             try {
+                LOGGER.warn("Exchange value: "+ value);
                 SimpleDateFormat parser = ExchangeSession.getExchangeDateFormat(value);
 
                 Calendar calendarValue = Calendar.getInstance(GMT_TIMEZONE);

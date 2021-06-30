@@ -395,6 +395,7 @@ public abstract class EWSMethod extends PostMethod {
             }
             if (methodOptions != null) {
                 for (AttributeOption attributeOption : methodOptions) {
+                    //@todo: Add StartTimeZone as AttributeOption
                     attributeOption.write(writer);
                 }
             }

@@ -27,7 +27,6 @@ import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.regex.MatchResult;
 
 /**
  * VCalendar object.
@@ -427,7 +426,7 @@ public class VCalendar extends VObject {
                     dtEnd.setParam("TZID", "W. Europe Standard Time");
                     //dtEnd.setParam("TZID", vTimezone.getPropertyValue("TZID") );
 
-                    //LOGGER.warn("----> DEBUG: vProperty.params.VALUE: " + vProperty.toString());
+                    LOGGER.warn("----> DEBUG: vProperty.params.VALUE: " + vProperty.toString());
                     if (vProperty != null && vProperty.hasParam("TZID")) {
                         vProperty.addParam("TZID", vTimezone.getPropertyValue("TZID"));
                     }

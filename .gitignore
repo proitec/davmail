@@ -5,4 +5,10 @@ target/*
 *.iws
 *.ipr
 
+*.class
+*.jar
+*.exe
+bin/*
+lib/*
+
 .idea/**

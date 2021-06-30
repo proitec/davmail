@@ -210,10 +210,10 @@ public final class Settings {
         SETTINGS.put("davmail.ssl.nosecureldap", Boolean.FALSE.toString());
 
         // logging
-        SETTINGS.put("log4j.rootLogger", Level.WARN.toString());
-        SETTINGS.put("log4j.logger.davmail", Level.DEBUG.toString());
-        SETTINGS.put("log4j.logger.httpclient.wire", Level.WARN.toString());
-        SETTINGS.put("log4j.logger.org.apache.commons.httpclient", Level.WARN.toString());
+        SETTINGS.put("log4j.rootLogger", Level.TRACE.toString());
+        SETTINGS.put("log4j.logger.davmail", Level.TRACE.toString());
+        SETTINGS.put("log4j.logger.httpclient.wire", Level.TRACE.toString());
+        SETTINGS.put("log4j.logger.org.apache.commons.httpclient", Level.TRACE.toString());
         SETTINGS.put("davmail.logFilePath", "");
     }
 
